@@ -1,0 +1,46 @@
+- hosts: gsaws
+  tasks:
+  - pause: minutes=2
+  - name: install mysql 
+    script: ./install.sh
+  - service: name=mysql state=started
+  - service: name=mysql enabled=yes 
+  - name: install ruby 
+    apt: name=ruby state=present 
+  - name: install rubygems 
+    apt: name=rubygems state=present
+  - apt: name=libmysql-ruby state=present
+  - command: sudo apt-get install ruby-dev zlib1g-dev liblzma-dev
+  - name: gem installs
+    command: sudo gem install mysql
+  - command: sudo gem install sequel 
+  - command: sudo gem install sinatra 
+  - command: sudo gem install nokogiri
+  
+  - name: createdb 
+    script: ./dbcreate.rb
+  - name: groups table
+    script: /root/groupsyria/api/handledb/mysql
+  - name: people table
+    script: /root/groupsyria/api/handledb/people 
+  - name: groupinfo table 
+    script: /root/groupsyria/api/handledb/groupinfo 
+ 
+  - name: installing watir
+    command: gem install watir 
+  
+  - name: installing mechanize 
+    command: sudo gem install mechanize
+  - command: sudo gem install httpclient
+  - apt: name=xvfb state=installed 
+  - command: sudo gem install headless 
+  - command: sudo gem install rack-reverse-proxy 
+  - apt: name=iceweasel state=present 
+  - name: install nginx 
+    apt: name=nginx state=present 
+  - command: sudo rm /etc/nginx/nginx.conf
+  - name: copying config file 
+    copy: src=./nginx.conf dest=/etc/nginx/nginx.conf 
+  - command: gem install rufus-scheduler
+  - command: nginx -s reload 
+  - service: name=nginx state=enabled
