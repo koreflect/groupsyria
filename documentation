@@ -1,0 +1,51 @@
+I know I should have used swagger but I'm lazy right now. 
+I also know I should have made it use post put delete patch, and whatever but honest I'm too paranoid for a post request let alone
+the others lot's of neat vectors for xml based attack don't tell me nokogiri patched its xxe vuln parsers are extremely 
+vulnerable by default.
+
+The supported groups are: 
+  FreeSyrianArmy         
+  alnusra                
+  hezbollah     
+  syriandemocraticforces
+  
+in order to retrieve news about a specific group it goes 
+
+http://54.163.183.214/groups/news/:groupname 
+so to find news from hezbollah you would go
+  http://54.163.183.214/groups/news/hezbollah 
+
+Parsing 
+  It's in xml but when they get large it gets unwieldly so use an html parser instead.I sort of regret using Nokogiris XML builder
+  in a block 
+  the parent element is body  the elements to parse remain the same through out all of the resources so it's going to be 
+  tit for the articles title date for the articles date body for the articles date. 
+  so an example of how to parse code wise would be: 
+  parser = Nokogiri::HTML(doc)
+  bod = parser.xpath("//body")
+  bod.each do |x|
+    title = x.xpath("//tit").text
+    article = x.xpath(//).text
+    date = x.xpath(//date).text
+    out = "#{title} \n #{date} \n \n" #{article} \n\n"
+  end 
+
+By Agency: 
+  If you wish to view the news by agency visit /news/source/:agency
+  The supported agencies are. 
+  Al-Bawaba
+  Al Jazeera 
+  Al-Arabiya
+  Tasnim News Agency 
+  Ara News
+  Al-Monitor
+  Fars News 
+  Middle East Eye 
+  
+All news
+  literally it's just 
+  /news/all
+
+Searching by Title: 
+  /news/search/:whatever title
+  
